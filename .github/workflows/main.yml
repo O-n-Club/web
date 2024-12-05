@@ -1,0 +1,22 @@
+name: Sync Repositories
+
+on:
+  push:
+    branches: [ master ]  # Adjust branch name if needed
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Push to destination
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.SYNC_TOKEN }}
+        run: |
+          git remote add destination https://oauth2:${API_TOKEN_GITHUB}@github.com/0xKoller/club.git
+          git push destination master:master --force
