@@ -2,8 +2,8 @@ name: Sync Repositories
 
 on:
   push:
-    branches: [ master ]
-  workflow_dispatch:  
+    branches: [ master ]  # Changed to master since that's your branch
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -14,9 +14,15 @@ jobs:
         with:
           fetch-depth: 0
           
-      - name: Push to destination
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.SYNC_TOKEN }}
+      - name: Configure Git
         run: |
-          git remote add destination https://oauth2:${API_TOKEN_GITHUB}@github.com/0xKoller/club.git
-          git push destination master:master --force
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+      - name: Push to destination
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.SYNC_TOKEN }}
+          repository: 0xKoller/club
+          branch: master
+          force: true
