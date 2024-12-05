@@ -2,8 +2,8 @@ name: Sync Repositories
 
 on:
   push:
-    branches: [ master ]  # Adjust branch name if needed
-  workflow_dispatch:  # Allows manual trigger
+    branches: [ master ]
+  workflow_dispatch:  
 
 jobs:
   sync:
